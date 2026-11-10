@@ -1,9 +1,10 @@
+
 import requests
 import tkinter as tk
 from tkinter import messagebox
 import threading
 
-api_key='enter your api key'
+api_key='3b0e709e'
 
 class MovieApp:
     def __init__(self,root):
@@ -12,7 +13,8 @@ class MovieApp:
         self.root.geometry('500x500')
         self.root.configure(bg="#fdf5a7")
 
-        tk.Label(self.root,text='Enter Movie Name',bg='#fdf5a7',font=('Arial',12)).pack(pady=(10,0))
+        self.tx_lb=tk.Label(self.root,text='Enter Movie Name',bg='#fdf5a7',font=('Arial',12))
+        self.tx_lb.pack(pady=(10,0))
 
         self.frame1=tk.Frame(self.root,bg='#fdf5a7')
         self.frame1.pack(pady=10)
@@ -30,41 +32,43 @@ class MovieApp:
 
 
     def search(self):
-        def run(self):
-            movie=self.entry.get().strip()
-            if not movie:
-                messagebox.showinfo('Invalid','Something went wrong')
-                return
+        self.text_box.delete(1.0,tk.END)
+        self.tx_lb.config(text='wait loading...')
 
-            url=f'http://www.omdbapi.com/?t={movie}&apiKey={api_key}'
-            data= requests.get(url).json()
+        movie=self.entry.get().strip()
+        if not movie:
+            messagebox.showinfo('Invalid','Something went wrong')
+            return
 
-            if data.get('Response')=="false":
-                result= 'Could not find the movie'
-                self.text_box.insert(tk.END,result)
+        url=f'http://www.omdbapi.com/?t={movie}&apiKey={api_key}'
+        data= requests.get(url).json()
 
-            else:
-                self.text_box.insert(tk.END,'Wait loading...')
-                
-                result= f""" {data.get('Title')} ({data.get('Year')})
-                Rating: {data.get('imdbRating')} / 10 ({data.get('imdbVotes')} votes)
-                Runtime: {data.get('Runtime')} 
-                Release Date: {data.get('Released')}
-                Budget: $165,000,000
-                Revenue: {data.get('BoxOffice')}
-                Genres: {data.get('Genre')}
+        self.tx_lb.config(text='Enter movie name')
+        
+        if data.get('Response')=="false":
+            result= 'Could not find the movie'
 
-                Overview: {data.get('Plot')}
-                Top Cast: - {data.get('Actors')}
-                Director: {data.get('Director')}
-                    """
+        else:
+            
+            result= f""" 🎬{data.get('Title')} ({data.get('Year')})
+           ⭐️ Rating: {data.get('imdbRating')} / 10 ({data.get('imdbVotes')} votes)
+           🕐 Runtime: {data.get('Runtime')} 
+           📅 Release Date: {data.get('Released')}
+           💰  Budget: $165,000,000
+           💵 Revenue: {data.get('BoxOffice')}
+           🎭 Genres: {data.get('Genre')}
 
-                self.text_box.config(state='normal')
-                self.text_box.delete(1.0,tk.END)
-                self.text_box.insert(tk.END,result)
-                self.text_box.config(state='disabled')
+           📝 Overview: {data.get('Plot')}
+           👥  Top Cast: - {data.get('Actors')}
+           🎥 Director: {data.get('Director')}
+                """
 
-            threading.Thread(target=run , daemon=True).start()
+            self.text_box.config(state='normal')
+            self.text_box.delete(1.0,tk.END)
+            self.text_box.insert(tk.END,result)
+            self.text_box.config(state='disabled')
+
+    
 
             
 
