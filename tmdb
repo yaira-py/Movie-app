@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 import threading
 
-api_key='3b0e709e'
+api_key='enter_ur_api_key'
 
 class MovieApp:
     def __init__(self,root):
